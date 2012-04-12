@@ -5,7 +5,7 @@ This is in dev currently.
 
 Once it is released you'll be able to do the following::
 
-    $ npm install zenircbot_api
+    $ npm install zenircbot-api
 
 And you'll be able to use it like so::
 
