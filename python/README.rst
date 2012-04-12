@@ -13,6 +13,6 @@ And you'll be able to use it like so::
 
 
     client = ZenIRCBot(hostname='redis.server.location', port=6379)
-    client.send_message(to='#channel', message='ohai')
+    client.send_privmsg(to='#channel', message='ohai')
 
 Docs are availabe at: http://zenircbot.rtfd.org/
