@@ -1,0 +1,18 @@
+{
+    "author": "Wraithan <xwraithanx@gmail.com> (Chris McDonald)",
+    "name": "zenircbot-api",
+    "description": "API for ZenIRCBot",
+    "version": "2.1.3",
+    "homepage": "http://zenircbot.rtfd.org/",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/wraithan/zenircbot-api.git"
+    },
+    "engines": {
+        "node": "*"
+    },
+    "main": "./zenircbot-api.js",
+    "dependencies": {},
+    "devDependencies": {},
+    "optionalDependencies": {"redis": "*"}
+}
