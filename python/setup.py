@@ -14,12 +14,12 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
-required = ['redis',]
+required = ['redis', 'gevent']
 py_modules = ['zenircbot_api',]
 
 setup(
     name='zenircbot_api',
-    version='2.2.1',
+    version='2.2.2',
     description='API for ZenIRCBot',
     long_description=open('README.rst').read() + '\n\n' +
                      open('HISTORY.rst').read(),

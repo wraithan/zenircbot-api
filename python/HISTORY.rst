@@ -3,6 +3,11 @@
 History
 -------
 
+2.2.2 (2012-04-17)
+++++++++++++++++++
+
+* Switched to gevent instead of Thread to make killing services easier.
+
 2.2.1 (2012-04-17)
 ++++++++++++++++++
 
