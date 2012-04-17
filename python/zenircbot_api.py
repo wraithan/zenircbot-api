@@ -9,7 +9,7 @@ def load_config(name):
         return json.loads(f.read())
 
 
-__version__ = '2.2.0'
+__version__ = '2.2.1'
 
 
 class ZenIRCBot(object):

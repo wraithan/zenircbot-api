@@ -19,7 +19,7 @@ py_modules = ['zenircbot_api',]
 
 setup(
     name='zenircbot_api',
-    version='2.2.0',
+    version='2.2.1',
     description='API for ZenIRCBot',
     long_description=open('README.rst').read() + '\n\n' +
                      open('HISTORY.rst').read(),
@@ -27,10 +27,10 @@ setup(
     author_email='xwraithanx@gmail.com',
     url='http://zenircbot.rtfd.org/',
     py_modules=py_modules,
-    package_data={'': ['../LICENSE',]},
+    package_data={'': ['LICENSE',]},
     include_package_data=True,
     install_requires=required,
-    license=open('../LICENSE').read(),
+    license=open('LICENSE').read(),
     classifiers=(
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
