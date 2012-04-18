@@ -1,17 +1,16 @@
-.. ZenIRCBot API documentation master file, created by
-   sphinx-quickstart on Tue Apr 17 16:41:01 2012.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to ZenIRCBot API's documentation!
 =========================================
+
+This is the API for ZenIRCBot_. 
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
-
+   general
+   javascript
+   python
 
 Indices and tables
 ==================
@@ -20,3 +19,4 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+.. _ZenIRCBot: http://zenircbot.wraithan.net/
