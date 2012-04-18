@@ -1,4 +1,5 @@
 General Usage
 =============
 
-Mer
+.. automodule:: zenircbot_api
+   :members:

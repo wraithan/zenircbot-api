@@ -1,3 +1,4 @@
+"""ZenIRCBot API"""
 import json
 import gevent
 from gevent import monkey
@@ -7,6 +8,14 @@ from redis import StrictRedis
 monkey.patch_all()
 
 def load_config(name):
+    """ Loads a JSON file and returns an object.
+
+    :param string name: The JSON file to load.
+    :returns: An native object with the contents of the JSON file.
+
+    This is a helper so you don't have to do the file IO and JSON
+    parsing yourself.
+    """
     with open(name) as f:
         return json.loads(f.read())
 
@@ -15,6 +24,17 @@ __version__ = '2.2.3'
 
 
 class ZenIRCBot(object):
+    """Instantiates a new ZenIRCBot API object.
+
+    Takes Redis server parameters to use for instantiating Redis
+    clients.
+
+    :param string host: Redis hostname (default: 'localhost')
+    :param integer port: Redis port (default: 6379)
+    :param integer db: Redis DB number (default: 0)
+
+    :returns: ZenIRCBot instance
+    """
 
     def __init__(self, host='localhost', port=6379, db=0):
         self.host = host
@@ -25,6 +45,16 @@ class ZenIRCBot(object):
                                  db=self.db)
 
     def send_privmsg(self, to, message):
+        """Sends a message
+
+        :param to: A list or a string, if it is a list it will send to
+                   all the people or channels listed.
+        :param string message: The message to send.
+
+        This is a helper so you don't have to handle the JSON or the
+        envelope yourself.
+
+        """
         if isinstance(to, basestring):
             to = (to,)
         for channel in to:
@@ -38,6 +68,14 @@ class ZenIRCBot(object):
                                                 }}))
 
     def send_admin_message(self, message):
+        """Send admin message
+
+        :param string message: The message to send.
+
+        This is a helper function that sends the message to all of the
+        channels defined in ``admin_spew_channels``.
+
+        """
         admin_channels = self.redis.get('zenircbot:admin_spew_channels')
         self.send_privmsg(admin_channels, message)
 
@@ -49,6 +87,23 @@ class ZenIRCBot(object):
             func(message=message, *args, **kwargs)
 
     def register_commands(self, service, commands):
+        """Register commands
+
+        :param string script: The script with extension that you are
+                              registering.
+
+        :param list commands: A list of objects with name and description
+                              attributes used to reply to
+                              a commands query.
+
+        This will notify all ``admin_spew_channels`` of the script
+        coming online when the script registers itself. It will also
+        setup a subscription to the 'out' channel that listens for
+        'commands' to be sent to the bot and responds with the list of
+        script, command name, and command description for all
+        registered scripts.
+
+        """
         self.send_admin_message(service + ' online!')
         if commands:
             def registration_reply(message, service, commands):
@@ -68,6 +123,7 @@ class ZenIRCBot(object):
                                              'commands': commands})
 
     def get_redis_client(self):
+        """ Get redis client using values from instantiation time."""
         return StrictRedis(host=self.host,
                            port=self.port,
                            db=self.db)
