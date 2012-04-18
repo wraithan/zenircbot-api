@@ -26,14 +26,14 @@ __version__ = '2.2.3'
 class ZenIRCBot(object):
     """Instantiates a new ZenIRCBot API object.
 
-    Takes Redis server parameters to use for instantiating Redis
-    clients.
-
     :param string host: Redis hostname (default: 'localhost')
     :param integer port: Redis port (default: 6379)
     :param integer db: Redis DB number (default: 0)
-
     :returns: ZenIRCBot instance
+
+    Takes Redis server parameters to use for instantiating Redis
+    clients.
+
     """
 
     def __init__(self, host='localhost', port=6379, db=0):
@@ -45,7 +45,7 @@ class ZenIRCBot(object):
                                  db=self.db)
 
     def send_privmsg(self, to, message):
-        """Sends a message
+        """Sends a message to the specified channel(s)
 
         :param to: A list or a string, if it is a list it will send to
                    all the people or channels listed.
@@ -68,8 +68,7 @@ class ZenIRCBot(object):
                                                 }}))
 
     def send_admin_message(self, message):
-        """Send admin message
-
+        """
         :param string message: The message to send.
 
         This is a helper function that sends the message to all of the
@@ -87,8 +86,7 @@ class ZenIRCBot(object):
             func(message=message, *args, **kwargs)
 
     def register_commands(self, service, commands):
-        """Register commands
-
+        """
         :param string script: The script with extension that you are
                               registering.
 
