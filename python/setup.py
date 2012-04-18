@@ -19,7 +19,7 @@ py_modules = ['zenircbot_api',]
 
 setup(
     name='zenircbot_api',
-    version='2.2.2',
+    version='2.2.3',
     description='API for ZenIRCBot',
     long_description=open('README.rst').read() + '\n\n' +
                      open('HISTORY.rst').read(),
