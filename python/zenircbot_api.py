@@ -115,6 +115,9 @@ class ZenIRCBot(object):
                                                       command['name'],
                                                       command['description']
                                                   ))
+                        elif message['data']['message'] == 'services':
+                            self.send_privmsg(message['data']['sender'],
+                                              service)
             redis_sub = gevent.spawn(self.non_blocking_redis_subscribe,
                                      func=registration_reply,
                                      kwargs={'service': service,

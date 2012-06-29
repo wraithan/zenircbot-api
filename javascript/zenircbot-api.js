@@ -41,14 +41,18 @@ ZenIRCBot.prototype.register_commands = function(service, commands) {
     sub.subscribe('in');
     sub.on('message', function(channel, message){
         var msg = JSON.parse(message);
-        if (msg.version == 1 && msg.type == 'directed_privmsg') {
-            if (msg.data.message == 'commands') {
-                commands.forEach( function(command, index) {
-                    self.send_privmsg(msg.data.sender,
-                                      service + ': ' +
-                                      command.name + ' - ' +
-                                      command.description);
-                });
+        if (msg.version == 1) {
+            if (msg.type == 'directed_privmsg') {
+                if (msg.data.message == 'commands') {
+                    commands.forEach( function(command, index) {
+                        self.send_privmsg(msg.data.sender,
+                                          service + ': ' +
+                                          command.name + ' - ' +
+                                          command.description);
+                    });
+                } else if (msg.data.message == 'services') {
+                    self.send_privmsg(msg.data.sender, service);
+                }
             }
         }
     });
