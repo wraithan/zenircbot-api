@@ -4,10 +4,13 @@
 import os
 import sys
 
+setup = None
 try:
-    from setuptools import setup
+    from setuptools import setup as setuptools
+    setup = setuptools
 except ImportError:
-    from distutils.core import setup
+    from distutils.core import setup as distutils
+    setup = distutils
 
 
 if sys.argv[-1] == 'publish':
@@ -15,19 +18,19 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 required = ['redis', 'gevent']
-py_modules = ['zenircbot_api',]
+py_modules = ['zenircbot_api']
 
 setup(
     name='zenircbot_api',
     version='2.2.4',
     description='API for ZenIRCBot',
-    long_description=open('README.rst').read() + '\n\n' +
-                     open('HISTORY.rst').read(),
+    long_description=(open('README.rst').read() + '\n\n' +
+                      open('HISTORY.rst').read()),
     author='Wraithan (Chris McDonald)',
     author_email='xwraithanx@gmail.com',
     url='http://zenircbot.rtfd.org/',
     py_modules=py_modules,
-    package_data={'': ['LICENSE',]},
+    package_data={'': ['LICENSE']},
     include_package_data=True,
     install_requires=required,
     license=open('LICENSE').read(),

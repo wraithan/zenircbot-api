@@ -7,6 +7,7 @@ from redis import StrictRedis
 
 monkey.patch_all()
 
+
 def load_config(name):
     """ Loads a JSON file and returns an object.
 
@@ -118,10 +119,9 @@ class ZenIRCBot(object):
                         elif message['data']['message'] == 'services':
                             self.send_privmsg(message['data']['sender'],
                                               service)
-            redis_sub = gevent.spawn(self.non_blocking_redis_subscribe,
-                                     func=registration_reply,
-                                     kwargs={'service': service,
-                                             'commands': commands})
+            gevent.spawn(self.non_blocking_redis_subscribe,
+                         func=registration_reply,
+                         kwargs={'service': service, 'commands': commands})
 
     def get_redis_client(self):
         """ Get redis client using values from instantiation time."""
