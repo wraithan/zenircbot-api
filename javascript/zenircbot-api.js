@@ -11,6 +11,14 @@ function ZenIRCBot(host, port, db) {
 }
 
 ZenIRCBot.prototype.send_privmsg = function(to, message) {
+    this.publish_out('privmsg', to, message);
+};
+
+ZenIRCBot.prototype.send_action = function(to, message) {
+    this.publish_out('privmsg_action', to, message);
+};
+
+ZenIRCBot.prototype.publish_out = function(type, to, message) {
     var self = this;
     if (typeof(to) == 'string') {
         to = [to];
@@ -18,7 +26,7 @@ ZenIRCBot.prototype.send_privmsg = function(to, message) {
     to.forEach(function(destination) {
         self.redis.publish('out', JSON.stringify({
             version: 1,
-            type: 'privmsg',
+            type: type,
             data: {
                 to: destination,
                 message: message

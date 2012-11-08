@@ -68,6 +68,29 @@ class ZenIRCBot(object):
                                                     'message': message,
                                                 }}))
 
+    def send_action(self, to, message):
+        """Sends an "ACTION" message to the specified channel(s)
+
+        :param to: A list or a string, if it is a list it will send to
+                   all the people or channels listed.
+        :param string message: The message to send.
+
+        This is a helper so you don't have to handle the JSON or the
+        envelope yourself.
+
+        """
+        if isinstance(to, basestring):
+            to = (to,)
+        for channel in to:
+            self.get_redis_client().publish('out',
+                                            json.dumps({
+                                                'version': 1,
+                                                'type': 'privmsg_action',
+                                                'data': {
+                                                    'to': channel,
+                                                    'message': message,
+                                                }}))
+
     def send_admin_message(self, message):
         """
         :param string message: The message to send.
