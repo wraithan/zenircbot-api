@@ -1,13 +1,22 @@
 var fs = require('fs');
 var redis_lib = require('redis');
+var through = require('through');
 
 
-function ZenIRCBot(host, port, db) {
-    var self = this;
-    self.host = host || 'localhost';
-    self.port = port || 6379;
-    self.db = db || 0;
-    self.redis = self.get_redis_client();
+function ZenIRCBot(conf) {
+    var args = process.argv.slice(2)
+    if (args.length) {
+        this.host = args[0]
+        this.port = args[1]
+        this.db = args[2]
+    } else if (conf) {
+        this.host = conf.host
+        this.port = conf.port
+       this.db = conf.db
+    }
+    this.redis = this.get_redis_client()
+    this.out_channel = this.get_redis_client()
+    this.out_channel.subscribe('in')
 }
 
 ZenIRCBot.prototype.send_privmsg = function(to, message) {
@@ -45,34 +54,43 @@ ZenIRCBot.prototype.send_admin_message = function(message) {
 ZenIRCBot.prototype.register_commands = function(service, commands) {
     var self = this;
     self.send_admin_message(service + ' online!');
-    var sub = self.get_redis_client();
-    sub.subscribe('in');
-    sub.on('message', function(channel, message){
-        var msg = JSON.parse(message);
-        if (msg.version == 1) {
-            if (msg.type == 'directed_privmsg') {
-                if (msg.data.message == 'commands') {
-                    commands.forEach( function(command, index) {
-                        self.send_privmsg(msg.data.sender,
-                                          service + ': ' +
-                                          command.name + ' - ' +
-                                          command.description);
-                    });
-                } else if (msg.data.message == 'services') {
-                    self.send_privmsg(msg.data.sender, service);
-                }
-            }
+    var filtered = self.filter({version: 1, type: 'directed_privmsg'})
+    filtered.on('data', function(msg){
+        if (msg.data.message == 'commands') {
+            commands.forEach( function(command) {
+                self.send_privmsg(msg.data.sender,
+                                  service + ': ' +
+                                  command.name + ' - ' +
+                                  command.description);
+            });
+        } else if (msg.data.message == 'services') {
+            self.send_privmsg(msg.data.sender, service);
         }
     });
-    return sub;
 };
 
 ZenIRCBot.prototype.get_redis_client = function() {
-    var self = this;
-    return redis_lib.createClient(self.port,
-                                  self.host, {
-                                      selected_db: self.db
+    return redis_lib.createClient(this.port,
+                                  this.host, {
+                                      selected_db: this.db
                                   });
+};
+
+ZenIRCBot.prototype.filter = function(query) {
+    var stream = through()
+    this.out_channel.on('message', function(subChannel, message) {
+        var msg = JSON.parse(message)
+        var results = true
+        for (var param in query) {
+            if (query.hasOwnProperty(param)) {
+                results = results && msg[param] == query[param]
+            }
+        }
+        if (results) {
+            stream.queue(msg)
+        }
+    })
+    return stream
 };
 
 function load_config(name) {
