@@ -44,6 +44,25 @@ ZenIRCBot.prototype.publish_out = function(type, to, message) {
     });
 };
 
+ZenIRCBot.prototype.join_channel = function(channel) {
+    var self = this;
+    self.redis.publish('out', JSON.stringify({
+        version: 1,
+        type: 'raw',
+        command: 'JOIN ' + channel
+    }));
+};
+
+ZenIRCBot.prototype.part_channel = function(channel, message) {
+    var self = this;
+    var message = message || 'Doing as my master bids.'
+    self.redis.publish('out', JSON.stringify({
+        version: 1,
+        type: 'raw',
+        command: 'PART ' + channel + ' :' + message
+    }));
+};
+
 ZenIRCBot.prototype.send_admin_message = function(message) {
     var self = this;
     self.redis.get('zenircbot:admin_spew_channels', function(err, channels) {

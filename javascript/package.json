@@ -2,7 +2,7 @@
     "author": "Wraithan <xwraithanx@gmail.com> (Chris McDonald)",
     "name": "zenircbot-api",
     "description": "API for ZenIRCBot",
-    "version": "2.3.1",
+    "version": "2.4.0",
     "homepage": "http://zenircbot.rtfd.org/",
     "repository": {
         "type": "git",
